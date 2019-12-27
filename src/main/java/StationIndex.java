@@ -60,7 +60,7 @@ public class StationIndex
     {
         Station query = new Station(name, getLine(lineNumber));
         Station station = stations.ceiling(query);
-        return station.equals(query) ? station : null;
+        return Objects.equals(station, query) ? station : null;
     }
 
     public Set<Station> getConnectedStations(Station station)

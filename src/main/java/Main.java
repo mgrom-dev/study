@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Main
 {
-    private static String dataFile = "src/main/resources/map.json";
+    private static final String dataFile = "src/main/resources/map.json";
     private static Scanner scanner;
 
     private static StationIndex stationIndex;
@@ -23,8 +23,7 @@ public class Main
 
         System.out.println("Программа расчёта маршрутов метрополитена Санкт-Петербурга\n");
         scanner = new Scanner(System.in);
-        for(;;)
-        {
+        for (int i = 0; i < 100; i++ ) {
             Station from = takeStation("Введите станцию отправления:");
             Station to = takeStation("Введите станцию назначения:");
 
@@ -99,6 +98,7 @@ public class Main
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static void parseConnections(JSONArray connectionsArray)
     {
         connectionsArray.forEach(connectionObject ->
@@ -123,6 +123,7 @@ public class Main
         });
     }
 
+    @SuppressWarnings("unchecked")
     private static void parseStations(JSONObject stationsObject)
     {
         stationsObject.keySet().forEach(lineNumberObject ->
@@ -139,6 +140,7 @@ public class Main
         });
     }
 
+    @SuppressWarnings("unchecked")
     private static void parseLines(JSONArray linesArray)
     {
         linesArray.forEach(lineObject -> {
@@ -151,12 +153,13 @@ public class Main
         });
     }
 
+
     private static String getJsonFile()
     {
         StringBuilder builder = new StringBuilder();
         try {
             List<String> lines = Files.readAllLines(Paths.get(dataFile));
-            lines.forEach(line -> builder.append(line));
+            lines.forEach(builder::append);
         }
         catch (Exception ex) {
             ex.printStackTrace();

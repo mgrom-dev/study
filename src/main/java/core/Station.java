@@ -32,9 +32,11 @@ public class Station implements Comparable<Station>
     }
 
     @Override
+
     public boolean equals(Object obj)
     {
-        return compareTo((Station) obj) == 0;
+        if (obj instanceof Station) return compareTo((Station) obj) == 0;
+        return true;
     }
 
     @Override

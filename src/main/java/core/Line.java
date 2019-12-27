@@ -45,6 +45,7 @@ public class Line implements Comparable<Line>
     @Override
     public boolean equals(Object obj)
     {
-        return compareTo((Line) obj) == 0;
+        if (obj instanceof Line) return compareTo((Line) obj) == 0;
+        return true;
     }
 }

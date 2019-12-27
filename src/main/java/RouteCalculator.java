@@ -1,16 +1,13 @@
 import core.Station;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RouteCalculator
 {
     private StationIndex stationIndex;
 
-    private static double interStationDuration = 2.5;
-    private static double interConnectionDuration = 3.5;
+    private static final double interStationDuration = 2.5;
+    private static final double interConnectionDuration = 3.5;
 
     public RouteCalculator(StationIndex stationIndex)
     {
@@ -25,7 +22,8 @@ public class RouteCalculator
         }
 
         route = getRouteWithOneConnection(from, to);
-        if(route != null) {
+        //Ошибка (route != null)! Не учитывается, что getRouteWithOneConnection может вернуть нулевой маршрут
+        if(route != null && route.size() > 0) {
             return route;
         }
 
@@ -103,8 +101,8 @@ public class RouteCalculator
                 if(isConnected(srcStation, dstStation))
                 {
                     ArrayList<Station> way = new ArrayList<>();
-                    way.addAll(getRouteOnTheLine(from, srcStation));
-                    way.addAll(getRouteOnTheLine(dstStation, to));
+                    way.addAll(Objects.requireNonNull(getRouteOnTheLine(from, srcStation)));
+                    way.addAll(Objects.requireNonNull(getRouteOnTheLine(dstStation, to)));
                     if(route.isEmpty() || route.size() > way.size())
                     {
                         route.clear();
@@ -158,9 +156,9 @@ public class RouteCalculator
                     continue;
                 }
                 ArrayList<Station> way = new ArrayList<>();
-                way.addAll(getRouteOnTheLine(from, srcStation));
+                way.addAll(Objects.requireNonNull(getRouteOnTheLine(from, srcStation)));
                 way.addAll(connectedLineRoute);
-                way.addAll(getRouteOnTheLine(dstStation, to));
+                way.addAll(Objects.requireNonNull(getRouteOnTheLine(dstStation, to)));
                 if(route.isEmpty() || route.size() > way.size())
                 {
                     route.clear();
