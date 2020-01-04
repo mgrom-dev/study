@@ -1,0 +1,14 @@
+no	name	type	duration
+1	С#-разработчик с нуля	PROGRAMMING	30
+2	Веб-разработчик c 0 до PRO	PROGRAMMING	10
+3	Data Scientist с 0 до PRO	PROGRAMMING	9
+4	Аналитик данных на Python	PROGRAMMING	3
+5	Мобильный разработчик с нуля	PROGRAMMING	10
+6	Мобильный разработчик PRO	PROGRAMMING	12
+7	Программист 1С-Битрикс	PROGRAMMING	18
+8	Frontend-разработчик	PROGRAMMING	9
+9	Java-разработчик	PROGRAMMING	5
+10	PHP-разработчик с 0 до PRO	PROGRAMMING	3
+11	Python-разработчик с нуля	PROGRAMMING	4
+duration_all_courses_programming
+113

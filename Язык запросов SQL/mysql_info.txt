@@ -1,0 +1,42 @@
+Примерный синтаксис для mysql
+
+Запускаем mysql с паролем test и именем базы skillbox
+mysql MYSQL_ROOT_PASSWORD=test MYSQL_DATABASE=skillbox
+
+Подключаем к базе с паролем test
+mysql -ptest
+
+Заливаем базу данных из файла в базу skillbox
+mysql -ptest skillbox < ./some/folder/dump.sql
+
+Использовть базу данных skillbox
+use skillbox;
+
+Посмотреть список таблиц в базе
+SHOW TABLES IN skillbox;
+
+Выбрать всех из таблицы студентов и отсортировать по дате регистрации
+SELECT * FROM Students ORDER BY registration_date;
+
+Выбрать нужные колонки с двумя условиями, остортировать по цене и ограничить выбор 5 строками
+SELECT name, students_count, duration, price FROM Courses WHERE duration > 10 AND students_count > 4 ORDER BY price DESC LIMIT 5;
+
+Выбрать из временных таблиц все колонки и объединить их
+SELECT * from (SELECT name, age as "age/duration" FROM Students ORDER BY age LIMIT 3) as students
+UNION ALL
+SELECT * from (SELECT name, age as "age/duration" FROM Teachers ORDER BY age DESC LIMIT 3) as teachers
+
+Добавляем нумерацию строк
+SELECT ROW_NUMBER() OVER(ORDER BY name) no, name, age, salary FROM Teachers WHERE salary > 10000;
+
+Получаем среднее значение возраста
+SELECT AVG(age) as average_age_teachers_with_salary_over_10000 FROM Teachers WHERE salary > 10000;
+
+Суммируем цену
+SELECT SUM(price) as price_off_all_courses_design FROM Courses WHERE type = 'DESIGN';
+
+Выбираем студентов, считаем продолжительность всех курсов, на которые подписан студент объеденяя с таблицей подписок и группируем по id студента
+SELECT Students.name as name, SUM(duration) as count_hours FROM Courses
+JOIN Subscriptions ON Courses.id = Subscriptions.course_id
+JOIN Students ON Students.id = Subscriptions.student_id
+GROUP BY Students.id ORDER BY count_hours DESC;
