@@ -4,14 +4,14 @@
         <File name="SearchQuery" fileName="logs/search_query.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
             <Filters>
-                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="INPUT_HISTORY"/>
             </Filters>
         </File>
 
         <File name="SearchError" fileName="logs/search_error.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
             <Filters>
-                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="INVALID_STATIONS"/>
             </Filters>
         </File>
 
@@ -22,8 +22,8 @@
 
     <loggers>
         <root level="info">
-            <appender-ref ref="SearchQuery" level="info"/>
-            <appender-ref ref="SearchError" level="warn"/>
+            <appender-ref ref="SearchQuery"/>
+            <appender-ref ref="SearchError"/>
             <appender-ref ref="Exceptions" level="error"/>
         </root>
     </loggers>

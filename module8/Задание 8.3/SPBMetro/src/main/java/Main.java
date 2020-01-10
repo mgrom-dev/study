@@ -2,6 +2,8 @@ import core.Line;
 import core.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,12 +21,13 @@ public class Main
 
     private static StationIndex stationIndex;
 
-    private static Logger logger;
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final Marker INPUT_HISTORY_MARKER = MarkerManager.getMarker("INPUT_HISTORY");
+    private static final Marker INVALID_STATIONS_MARKER = MarkerManager.getMarker("INVALID_STATIONS");
 
     public static void main(String[] args)
     {
         RouteCalculator calculator = getRouteCalculator();
-        logger = LogManager.getRootLogger();
 
         System.out.println("Программа расчёта маршрутов метрополитена Санкт-Петербурга\n");
         scanner = new Scanner(System.in);
@@ -41,7 +44,7 @@ public class Main
                         RouteCalculator.calculateDuration(route) + " минут");
             }
         } catch (Exception ex){
-            logger.error(ex.getMessage());
+            LOGGER.error(ex);
         }
     }
 
@@ -78,11 +81,11 @@ public class Main
             System.out.println(message);
             String line = scanner.nextLine().trim();
             Station station = stationIndex.getStation(line);
-            logger.info("Поиск станции: " + line);
+            LOGGER.info(INPUT_HISTORY_MARKER, "Пользователь ввел станцию: {}", line);
             if(station != null) {
                 return station;
             }
-            logger.warn("Станция не найдена: " + line);
+            LOGGER.info(INVALID_STATIONS_MARKER, "Станция не найдена: {}", line);
             System.out.println("Станция не найдена :(");
         }
     }
