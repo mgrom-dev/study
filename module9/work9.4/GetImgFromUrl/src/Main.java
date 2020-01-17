@@ -45,7 +45,7 @@ public class Main
             String fileName = url.substring(url.lastIndexOf('/') + 1);
             String ext = fileName.substring(fileName.lastIndexOf('.') + 1);
             //скачиваем только картинки
-            if (ext.equals("jpg") || ext.equals("png") || ext.equals("bmp")) {
+            if ("jpg".equals(ext) || "png".equals(ext) || "bmp".equals(ext)) {
                 //загружаем картинку и сохраняем в файл
                 byte[] bytes = Jsoup.connect(url).ignoreContentType(true).execute().bodyAsBytes();
                 Files.write(Paths.get(path + "/" + fileName), bytes);
