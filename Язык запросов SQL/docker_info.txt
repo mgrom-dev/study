@@ -21,5 +21,8 @@ docker exec -it skill-sql mysql -ptest
 Остановить запущенный контейнер
 docker stop skill-sql
 
+Удалить контейнер
+docker rm skill-sql
+
 Остановить все контейнеры
 FOR /f "tokens=*" %i IN ('docker ps -q') DO docker stop %i

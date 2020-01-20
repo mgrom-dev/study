@@ -166,7 +166,7 @@ public class wikiMskMetroJSON extends JSONObject
         {
             Matcher match = Pattern.compile("(?<=Переход на станцию )[А-Я а-я]+(?= [А-Я])").matcher(el.attr("alt"));
             line = getNumberLineFromUrl(el.attr("src"));
-            if (line.length() != 0 && match.find()) {
+            if (!line.isEmpty() && match.find()) {
                 connectionsJSON.append(",{\"line\":\"").append(line).append("\", \"station\":\"").append(match.group()).append("\"}");
             }
         }
@@ -184,7 +184,7 @@ public class wikiMskMetroJSON extends JSONObject
      */
     private void putLine(String number, String name, String color)
     {
-        if (number.length() != 0 && name.length() != 0 && color.length() != 0) {
+        if (!number.isEmpty() && !name.isEmpty() && !color.isEmpty()) {
             if (!lines.contains(number)) {
                 lines.add(JSONValue.parse(new Formatter().format("{\"number\":\"%s\", \"name\":\"%s\", \"color\":\"%s\"}",
                         number, name, color).toString()));
@@ -199,7 +199,7 @@ public class wikiMskMetroJSON extends JSONObject
      */
     private void putStation(String line, String name)
     {
-        if (line.length() != 0 && name.length() != 0) {
+        if (!line.isEmpty() && !name.isEmpty()) {
             if (!stations.containsKey(line)) { stations.put(line, new JSONArray()); }
             ((JSONArray) stations.get(line)).add(name);
         }
