@@ -1,13 +1,13 @@
 import java.sql.*;
 
 public class Main {
-    static final String url = "jdbc:mysql://localhost:3306/skillbox";
-    static final String user = "root";
-    static final String password = "testtest";
+    public static final String URL = "jdbc:mysql://localhost:3306/skillbox";
+    public static final String USER = "root";
+    public static final String PASSWORD = "testtest";
 
     public static void main(String[] args) {
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = connection.createStatement();
             //вычисляем количество месяцев с момента первой покупки и последней
             statement.execute("SELECT @count_months := " +
@@ -20,11 +20,14 @@ public class Main {
                     "FROM purchaselist GROUP BY course_name ORDER BY course_name;");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             //выводим заголовок таблицы
+            if (resultSet.getMetaData().getColumnCount() == 0) throw new ResultSetException("Error. No columns from request.");
             for (int i = 1, c = rsmd.getColumnCount(); i <= c; i++){
                 System.out.printf("| %-38s", rsmd.getColumnName(i));
             }
             System.out.println("|\n" + String.format("%" + (rsmd.getColumnCount() * 40 + 1) + "s", "").replace(' ', '-'));
             //выводим строки таблицы
+            if (!resultSet.first()) throw new ResultSetException("Error. No rows from request.");
+            resultSet.beforeFirst();
             while(resultSet.next()){
                 for (int i = 1, c = rsmd.getColumnCount(); i <= c; i++){
                     System.out.printf("| %-38s", resultSet.getString(i));
@@ -34,7 +37,7 @@ public class Main {
             resultSet.close();
             statement.close();
             connection.close();
-        } catch (SQLException e) {
+        } catch (SQLException | ResultSetException e) {
             e.printStackTrace();
         }
     }
