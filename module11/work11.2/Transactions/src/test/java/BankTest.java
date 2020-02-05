@@ -1,4 +1,5 @@
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -25,6 +26,7 @@ public class BankTest extends TestCase {
      */
     public void testTransfers() {
         //совершаем 200 переводов
+        long sumInit = bank.getAccounts().values().stream().mapToLong(Account::getMoney).sum();
         for (AtomicInteger i = new AtomicInteger(0); i.get() < 200; i.incrementAndGet()) {
             String fromAccountNum = new Random().nextInt(1000) + ""; //номер счета с которого совершается перевод
             String toAccountNum = new Random().nextInt(1000) + ""; //номер счета на который будет совершен перевод
@@ -43,5 +45,7 @@ public class BankTest extends TestCase {
                 e.printStackTrace();
             }
         }
+        long sumActual = bank.getAccounts().values().stream().mapToLong(Account::getMoney).sum();
+        Assert.assertEquals(sumInit, sumActual);
     }
 }
