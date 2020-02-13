@@ -10,6 +10,9 @@ docker run --rm --name skill-sql -e MYSQL_ROOT_PASSWORD=test -e MYSQL_DATABASE=s
 -e - задаем аргументы для запуска контейнера
 -d - запуск контейнера в фоновом режиме
 
+Запуск redis
+docker run --rm --name skill-redis -p 127.0.0.1:6379:6379/tcp -d redis
+
 Список запущенных контейнеров
 docker ps
 

@@ -1,0 +1,216 @@
+body {
+    background-color: #a29584;
+}
+
+div.main {
+    width: calc(100% - 60px);
+    min-height: calc(100% - 30px);
+    position: absolute;
+    margin: 20px 20px 0 20px;
+    border-radius: 30px;
+    box-shadow: 5px 10px 10px 20px rgba(0,0,0,0.22);
+}
+
+div.main.index {
+    background-image: url(/images/bg.jpg);
+    background-size: cover;
+    background-position-y: -30px;
+}
+
+div.main.todo {
+    background-image: url(/images/bg_todo.jpg);
+    background-size: cover;
+    overflow: auto;
+}
+
+div.main.regExp {
+    background-image: url(/images/bg_regexp.jpg);
+    background-size: cover;
+    overflow: auto;
+}
+
+div.button.index{
+     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+     font-size: 20px;
+     color: #f9f6a5;
+     letter-spacing: -0.2px;
+     word-spacing: 3.2px;
+     font-weight: 700;
+     left: 100px;
+     top: 20px;
+}
+
+div.button {
+    opacity: 0.7;
+    display: inline-block;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    text-shadow: 1px 1px 2px black;
+}
+
+div.button:hover {
+    opacity: 1;
+}
+
+div.button.index:hover {
+    margin-top: 2px;
+    text-decoration: overline solid rgb(68, 68, 68);
+}
+
+div.button.todo:hover {
+    font-weight: 700;
+}
+
+div.todo.list {
+    position: absolute;
+    top: 20px;
+    left: 80px;
+    font-size: 18px;
+    color: antiquewhite;
+    text-shadow: 2px 2px 3px black;
+    user-select: none;
+    text-decoration: underline solid;
+}
+
+div.time {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    letter-spacing: -0.2px;
+    word-spacing: 6px;
+    color: #000000;
+    font-weight: 400;
+    display: inline-block;
+    user-select: none;
+    top: 20px;
+    position: absolute;
+    right: 0px;
+    margin-right: 20px;
+    text-shadow: 3px 3px 5px white;
+    opacity: 0.85;
+}
+
+img.home {
+    width: 30px;
+    top: 15px;
+    left: 15px;
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+img.weather {
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    box-shadow: 3px 3px 7px black;
+}
+
+img.remove.item {
+    width: 15px;
+    cursor: pointer;
+    -webkit-user-drag: none;
+}
+
+input.item {
+    background: url(/images/empty.png);
+    box-shadow: 2px 2px 5px black;
+    margin-right: 5px;
+    color: navajowhite;
+    text-indent: 2px;
+    text-shadow: -0 -1px 2px black,
+                0 -1px 2px black,
+                -0 1px 2px black,
+                0 1px 2px black,
+                -1px -0 2px black,
+                1px -0 2px black,
+                -1px 0 2px black,
+                1px 0 2px black,
+                -1px -1px 2px black,
+                1px -1px 2px black,
+                -1px 1px 2px black,
+                1px 1px 2px black,
+                -1px -1px 2px black,
+                1px -1px 2px black,
+                -1px 1px 2px black,
+                1px 1px 2px black;
+    opacity: 0.7;
+}
+
+input.item:focus {
+    opacity: 1;
+    border-width: 2px;
+}
+
+input.item.new {
+    opacity: 1;
+    border: none;
+    box-shadow: none;
+}
+
+input.item.name {
+    width: 150px;
+}
+
+input.item.description {
+    width: 250px;
+}
+
+div.regexp {
+    position: absolute;
+    width: 50%;
+    top: 20px;
+    left: 80px;
+    font-size: 18px;
+    color: antiquewhite;
+    text-shadow: 		-0   -2px 0   #000000,
+                 		 0   -2px 0   #000000,
+                 		-0    2px 0   #000000,
+                 		 0    2px 0   #000000,
+                 		-2px -0   0   #000000,
+                 		 2px -0   0   #000000,
+                 		-2px  0   0   #000000,
+                 		 2px  0   0   #000000,
+                 		-1px -2px 0   #000000,
+                 		 1px -2px 0   #000000,
+                 		-1px  2px 0   #000000,
+                 		 1px  2px 0   #000000,
+                 		-2px -1px 0   #000000,
+                 		 2px -1px 0   #000000,
+                 		-2px  1px 0   #000000,
+                 		 2px  1px 0   #000000,
+                 		-2px -2px 0   #000000,
+                 		 2px -2px 0   #000000,
+                 		-2px  2px 0   #000000,
+                 		 2px  2px 0   #000000,
+                 		-2px -2px 0   #000000,
+                 		 2px -2px 0   #000000,
+                 		-2px  2px 0   #000000,
+                 		 2px  2px 0   #000000;
+    user-select: none;
+}
+
+input.regexp {
+    width: 100%;
+}
+
+textarea.regexp {
+    width: 100%;
+    resize: none;
+}
+
+table.regexp {
+    position: absolute;
+    left: 50%;
+    margin-left: 100px;
+    top: 50px;
+    width: 450px;
+    background-color: rgba(248, 230, 218, 0.85);
+}
+
+table.regexp code {
+    background: #fff;
+    border: solid 1px #e1e4e5;
+    padding: 1px 3px;
+}

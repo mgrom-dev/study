@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <title>Список задач</title>
+</head>
+<body>
+    <div class="main todo">
+        <img class="home" src="/images/home.png" onclick="document.location.href = '/'">
+        <div class="todo list">
+            Список задач<br>
+            <div><input type="text" class="item name" value="Наименование"><input type="text" class="item description" value="Описание"></div>
+        </div>
+        <div class="time"></div>
+        <img class="weather" src="/weather">
+    </div>
+    <script src="/js/time.js"></script>
+    <script>
+        (() => {
+            let inputsValue = ["Наименование", "Описание"]; //Дефолтные значение инпутов по порядку
+            let sendProperties = ["name", "description"]; //Имена отправляемых параметров на сервер по порядку
+
+            //обработчик выбора input для нового элемента
+            function select(t){
+                if (inputsValue.includes(t.target.value)){
+                    t.target.value = "";
+                }
+            }
+
+            //обработчик потери фокуса input для нового элемента
+            function blur(t){
+                if (t.target.value == ""){
+                    t.target.value = t.target.defaultValue;
+                }
+                let inputs = [...t.target.parentNode.children];
+                if (!inputs.some(i => i === t.relatedTarget) && inputs.every(i => i.value != i.defaultValue)){
+                    //push new todo
+                    let body = '{';
+                    inputs.forEach((c, i) => {
+                        body += (i != 0 && ',' || '') + '"' + sendProperties[i] + '":"' + c.value + '"';
+                        c.value = inputsValue[i];
+                    });
+                    body += '}';
+                    sendRequest("/todo", "POST", body);
+                }
+            }
+
+            //функция отправки запроса
+            function sendRequest(url, method, body){
+                let params = !body ? {method: 'GET'} : {method: method, headers: {'Content-Type': 'application/json'}, body: body};
+                fetch(url, params).then(response => {
+                    if (response.status >= 400){ return Promise.reject(); }
+                    return response.json();
+                }).then(r => {
+                    if (!body) refreshToDoList(r);
+                    else getListToDo();
+                }).catch((e) => console.log('ошибка', e));
+            }
+
+            //добавляем обработчики для создания нового задания
+            inputsValue.forEach(i => {
+                let input = document.querySelector("input[value='" + i + "']");
+                input.addEventListener("click", select);
+                input.addEventListener("blur", blur);
+            });
+
+            //изменяем ширину инуптов по содержимому
+            function autoSizeInputs(t){
+                let lengthText = (t.target.value.length + 1) * 8;
+                if (t.target.offsetWidth < lengthText){
+                    let cssSelectText = "input.item." + t.target.classList[t.target.classList.length - 1];
+                    console.log(cssSelectText);
+                    [...document.styleSheets[0].cssRules].find(({selectorText}) => selectorText == cssSelectText).style.width = lengthText + "px";
+                }
+            }
+
+            //Добавление нового элемента списка дел
+            function addToDo(todo){
+                let div = document.createElement('div');
+                div.id = todo.id;
+                sendProperties.forEach(i => {
+                    div.appendChild(Object.assign(document.createElement('input'), {
+                        className: 'item new ' + i,
+                        value: todo[i],
+                        onkeydown: autoSizeInputs,
+                        onblur: (t) => {
+                            sendRequest("/todo", "PUT", '{"id":' + todo.id + ',"' + i + '":"' + t.target.value + '"}');
+                        }
+                    }));
+                });
+                div.appendChild(Object.assign(document.createElement('img'), {
+                    className: 'remove item',
+                    src: 'images/cross.png',
+                    title: 'удалить задачу',
+                    onclick: function () {
+                        sendRequest("/todo", "DELETE", '{"id":' + todo.id + '}');
+                    }
+                }));
+                document.querySelector(".todo.list").lastElementChild.before(div);
+            }
+
+            //сортируем список по ид
+            function sortToDo(){
+                [...document.querySelectorAll(".todo.list div[id]")].sort((e1, e2) => {
+                    let mod = e1.id - e2.id;
+                    if (mod > 0) {
+                        e2.after(e1);
+                    } else if(mod < 0) {
+                        e2.before(e1);
+                    }
+                    return mod;
+                });
+            }
+
+            //Обновляем задачу
+            function refreshToDo(todo){
+                let inputs = [...document.querySelectorAll(".todo.list div[id='" + todo.id + "'] input")];
+                if (inputs.length < 2) return;
+                if (inputs[0].value != todo.name){
+                    inputs[0].value = todo.name;
+                }
+                if (inputs[1].value != todo.description){
+                    inputs[1].value = todo.description;
+                }
+            }
+
+            //обновляем список задач
+            function refreshToDoList(todo){
+                let listToDo = [...document.querySelectorAll(".todo.list div[id]")];
+                let refreshItems = todo.filter(({"id": id1}) => listToDo.some(({"id": id2}) => id1 == id2));
+                let deleteItems = listToDo.filter(({"id": id1}) => !todo.some(({"id": id2}) => id1 == id2));
+                let newItems = todo.filter(({"id": id1}) => !listToDo.some(({"id": id2}) => id1 == id2));
+                newItems.forEach(i => addToDo(i));
+                refreshItems.forEach(i => refreshToDo(i));
+                deleteItems.forEach(i => i.remove());
+                sortToDo();
+            }
+
+            //получаем список дел с сервера
+            function getListToDo(){
+                sendRequest("/todo?list", "GET");
+            }
+            getListToDo();
+        })();
+    </script>
+</body>
+</html>

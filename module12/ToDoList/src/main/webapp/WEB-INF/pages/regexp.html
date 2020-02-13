@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <title>Редактор регулярных выражений</title>
+</head>
+<body>
+    <div class="main regExp">
+        <img class="home" src="/images/home.png" onclick="document.location.href = '/'">
+        <div class="regexp">
+            <div class="caption">Флаги:</div>
+            <input type="checkbox" id="global" checked="true"> global <input type="checkbox" id="ignore_case"> ignore case
+            <div class="caption">Регулярное выражение:</div>
+            <input type="text" class="regexp matcher" value="[A-Z]{1}[a-z]+">
+            <div class="caption">Исходный текст:</div>
+            <textarea class="regexp text" rows="8">Short for regular expression, a regex is a string of text that allows you to create patterns that help match, locate, and manage text. Perl is a great example of a programming language that utilizes regular expressions. However, its only one of the many places you can find regular expressions. Regular expressions can also be used from the command line and in text editors to find text within a file.</textarea>
+            <div class="caption">Результат regExp match:</div>
+            <textarea class="regexp result" rows="5" readonly></textarea>
+        </div>
+        <table border="1" class="regexp">
+            <colgroup>
+                <col width="11%">
+                <col width="89%">
+            </colgroup>
+            <thead valign="bottom">
+            <tr><th>RegEx</th>
+                <th>Находит</th>
+            </tr>
+            </thead>
+            <tbody valign="top">
+            <tr><td><code><span>^</span></code></td>
+                <td>начало строки</td>
+            </tr>
+            <tr><td><code><span>$</span></code></td>
+                <td>конец строки</td>
+            </tr>
+            <tr><td><code><span>\A</span></code></td>
+                <td>начало текста</td>
+            </tr>
+            <tr><td><code><span>\Z</span></code></td>
+                <td>конец текста</td>
+            </tr>
+            <tr><td><code><span>.</span></code></td>
+                <td>любой символ в строке</td>
+            </tr>
+            <tr><td><code><span>\w</span></code></td>
+                <td>буквенно-цифровой символ (включая <code ><span>_</span></code>)</td>
+            </tr>
+            <tr><td><code><span>\W</span></code></td>
+                <td>не буквенно-цифровой</td>
+            </tr>
+            <tr><td><code><span>\d</span></code></td>
+                <td>числовой символ (такой же как <code><span>[0123456789]</span></code>)</td>
+            </tr>
+            <tr><td><code><span>\D</span></code></td>
+                <td>нечисловой</td>
+            </tr>
+            <tr><td><code><span>\s</span></code></td>
+                <td>любой пробел (такой же как <code><span>[\t\n\r\f]</span></code>)</td>
+            </tr>
+            <tr><td><code><span>\S</span></code></td>
+                <td>не пробел</td>
+            </tr>
+            <tr><td><code><span>\h</span></code></td>
+                <td><div>
+                    <div>горизонтальный разделитель. Табуляция, пробел и все символы</div>
+                    <div>которые определены в Unicode как «space separator».</div>
+                </div>
+                </td>
+            </tr>
+            <tr><td><code><span>\H</span></code></td>
+                <td>не горизонтальный разделитель</td>
+            </tr>
+            <tr><td><code><span>\v</span></code></td>
+                <td><div>
+                    <div>вертикальные разделители. новая строка и все символы</div>
+                    <div>которые входят в набор «разделители строк» Unicode.</div>
+                </div>
+                </td>
+            </tr>
+            <tr><td><code><span>\V</span></code></td>
+                <td>не вертикальный разделитель</td>
+            </tr>
+            <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">\b</span></code></td>
+                <td>разделитель слов</td>
+            </tr>
+            <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">\B</span></code></td>
+                <td>разделительс с <strong>не</strong>-словом</td>
+            </tr>
+            <tr><td><code><span>\t</span></code></td>
+                <td>tab (HT/TAB), тоже что <code><span>\x09</span></code></td>
+            </tr>
+            <tr><td><code><span>\n</span></code></td>
+                <td>символ новой строки (NL), то же что <code><span>\x0a</span></code></td>
+            </tr>
+            <tr><td><code><span>\r</span></code></td>
+                <td>car.return (CR), тоже что <code><span>\x0d</span></code></td>
+            </tr>
+            <tr><td><code><span>{n}</span></code></td>
+                <td>ровно <code><span>n</span></code> раз</td>
+            </tr>
+            <tr><td><code><span>{n,}</span></code></td>
+                <td>по крайней мере <code><span>n</span></code> раз</td>
+            </tr>
+            <tr><td><code><span>{n,m}</span></code></td>
+                <td>по крайней мере <code><span>n</span></code>, но не более чем <code><span>m</span></code> раз</td>
+            </tr>
+            <tr><td><code><span>*</span></code></td>
+                <td>ноль или более, аналогично <code><span>{0,}</span></code></td>
+            </tr>
+            <tr><td><code><span>+</span></code></td>
+                <td>один или несколько, похожие на <code><span>{1,}</span></code></td>
+            </tr>
+            <tr><td><code><span>?</span></code></td>
+                <td>ноль или единица, похожая на <code><span>{0,1}</span></code></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="time"></div>
+        <img class="weather" src="/weather">
+    </div>
+    <script src="/js/time.js"></script>
+    <script>
+    (()=>{
+        let matcher = document.querySelector(".regexp.matcher"),
+            text = document.querySelector(".regexp.text");
+        [matcher, text, global, ignore_case].forEach(i => i.addEventListener("input", edit));
+
+        function edit(){
+            try{
+                document.querySelector(".result").innerHTML = text.value.match(new RegExp(matcher.value, (global.checked ? "g" : "") + (ignore_case.checked ? "i" : "")));
+            } catch(err){
+                document.querySelector(".result").innerHTML = err.message;
+            }
+        }
+
+        edit();
+    })();
+    </script>
+</body>
+</html>

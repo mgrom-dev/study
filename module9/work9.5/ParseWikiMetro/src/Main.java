@@ -41,11 +41,14 @@ public class Main
         //читаем с файла JSON со станциями и выводим в консоль количество станции на каждой линии
         try {
             JSONObject fileJSON = (JSONObject) JSONValue.parse(Files.readString(Paths.get(fileName)));
+            int countAllStation = 0;
             for (String numberLine : (Iterable<String>) ((JSONObject) fileJSON.get("stations")).keySet()) {
                 int countStations = ((JSONArray) ((JSONObject) fileJSON.get("stations")).get(numberLine)).size();
+                countAllStation += countStations;
                 String nameLine = getNameLine(numberLine, fileJSON);
                 System.out.println(nameLine + " № " + numberLine + ", количество станции на ветке: " + countStations);
             }
+            System.out.println("Всего станции: " + countAllStation);
         } catch (IOException e) {
             e.printStackTrace();
         }
