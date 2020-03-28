@@ -1,17 +1,18 @@
-package main;
+package com.example.taskmanager.service;
 
-import response.ToDo;
+import com.example.taskmanager.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class Storage {
-    private static ArrayList<ToDo> toDo = new ArrayList<>();
+
+    private static ArrayList<Task> taskM = new ArrayList<>();
     private static int counterId = 0;
 
-    public static List<ToDo> getAllToDo(){
-        return toDo;
+    public static List<Task> getAllToDo(){
+        return taskM;
     }
 
     public static int getCounterId() {
@@ -23,24 +24,24 @@ public class Storage {
     }
 
     //добавляем задачу
-    public static synchronized int addToDo(ToDo toDo){
+    public static synchronized int addToDo(Task taskM){
         counterId++;
-        Storage.toDo.add(toDo);
-        toDo.setId(counterId);
+        Storage.taskM.add(taskM);
+        taskM.setId(counterId);
         return counterId;
     }
 
     //удаляем задачу
     public static synchronized void deleteToDo(int id){
-        ToDo deleteItem = getById(id);
+        Task deleteItem = getById(id);
         if (deleteItem != null) {
-            toDo.remove(deleteItem);
+            taskM.remove(deleteItem);
         }
     }
 
     //получить задачу по ид
-    public static ToDo getById(int id){
-        for (ToDo item : toDo){
+    public static Task getById(int id){
+        for (Task item : taskM){
             if (item.getId() == id) {
                 return item;
             }

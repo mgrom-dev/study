@@ -1,13 +1,11 @@
-package main;
+package com.example.taskmanager.repo;
 
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.UnknownHostException;
 import java.util.Map;
 
 @Controller

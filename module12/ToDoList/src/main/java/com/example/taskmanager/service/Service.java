@@ -1,7 +1,7 @@
-package main;
+package com.example.taskmanager.service;
 
+import com.example.taskmanager.model.Task;
 import lombok.SneakyThrows;
-import response.ToDo;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,14 +22,14 @@ public class Service {
     {
         Properties prop = new Properties();
         try {
+            //Загружаем настройки
             prop.load(getClass().getClassLoader().getResource("application.properties").openStream());
+            fileTodo = (String)prop.get("data.file");
+            loadData();
+            trackMainClass();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        fileTodo = (String)prop.get("data.file");
-
-        loadData();
-        trackMainClass();
     }
 
     /**
@@ -42,7 +42,7 @@ public class Service {
             if (params.length == 1) {
                 Storage.setCounterId(Integer.parseInt(params[0]));
             } else {
-                ToDo todo = new ToDo(params[1], params[2]);
+                Task todo = new Task(params[1], params[2]);
                 todo.setId(Integer.parseInt(params[0]));
                 Storage.getAllToDo().add(todo);
             }

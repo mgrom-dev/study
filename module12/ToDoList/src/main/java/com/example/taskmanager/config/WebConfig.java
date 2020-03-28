@@ -1,4 +1,4 @@
-package main;
+package com.example.taskmanager.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;

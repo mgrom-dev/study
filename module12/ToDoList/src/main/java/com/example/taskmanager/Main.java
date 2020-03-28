@@ -1,18 +1,13 @@
-package main;
+package com.example.taskmanager;
 
+import com.example.taskmanager.service.Service;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import response.ToDo;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class Main  {
-
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

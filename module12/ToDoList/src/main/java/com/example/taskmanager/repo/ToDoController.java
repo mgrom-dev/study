@@ -1,9 +1,10 @@
-package main;
+package com.example.taskmanager.repo;
 
+import com.example.taskmanager.model.Task;
+import com.example.taskmanager.service.Storage;
 import lombok.Data;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import response.ToDo;
 
 import java.util.List;
 
@@ -18,22 +19,24 @@ class todo{
 @RestController
 @SuppressWarnings("unused")
 public class ToDoController {
+
+
     //получаем список задач
     @RequestMapping(value = "todo", method = RequestMethod.GET, params = "list")
-    public List<ToDo> list(@RequestParam("list") String list){
+    public List<Task> list(@RequestParam("list") String list){
         return Storage.getAllToDo();
     }
 
     //добавляем задачу
     @RequestMapping(value = "todo", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean add(@RequestBody todo todo){
-        Storage.addToDo(new ToDo(todo.getName(), todo.getDescription()));
+    public boolean add(@RequestBody Task todo){
+        Storage.addToDo(new Task(todo.getName(), todo.getDescription()));
         return true;
     }
 
     //изменяем задачу
     @RequestMapping(value = "todo", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean modify(@RequestBody todo todo){
+    public boolean modify(@RequestBody Task todo){
         if (todo.getDescription() != null) {
             Storage.getById(todo.getId()).setDescription(todo.getDescription());
         }
@@ -45,7 +48,7 @@ public class ToDoController {
 
     //удаляем задачу
     @RequestMapping(value = "todo", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean delete(@RequestBody todo todo){
+    public boolean delete(@RequestBody Task todo){
         Storage.deleteToDo(todo.getId());
         return true;
     }
