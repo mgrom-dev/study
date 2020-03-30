@@ -1,55 +1,39 @@
 package com.example.taskmanager.repo;
 
+import com.example.taskmanager.Main;
 import com.example.taskmanager.model.Task;
-import com.example.taskmanager.service.Storage;
-import lombok.Data;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Data
-//класс запроса на сервер
-class todo{
-    private int id;
-    private String name;
-    private String description;
-}
-
 @RestController
+@RequestMapping(value = "todo")
 @SuppressWarnings("unused")
 public class ToDoController {
-
-
     //получаем список задач
-    @RequestMapping(value = "todo", method = RequestMethod.GET, params = "list")
-    public List<Task> list(@RequestParam("list") String list){
-        return Storage.getAllToDo();
+    @GetMapping(params = "list")
+    public ResponseEntity<?> list(){
+        return ResponseEntity.ok(Main.base.list());
     }
 
     //добавляем задачу
-    @RequestMapping(value = "todo", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean add(@RequestBody Task todo){
-        Storage.addToDo(new Task(todo.getName(), todo.getDescription()));
-        return true;
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody Task todo){
+        Main.base.add(todo);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //изменяем задачу
-    @RequestMapping(value = "todo", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean modify(@RequestBody Task todo){
-        if (todo.getDescription() != null) {
-            Storage.getById(todo.getId()).setDescription(todo.getDescription());
-        }
-        if (todo.getName() != null) {
-            Storage.getById(todo.getId()).setName(todo.getName());
-        }
-        return true;
+    @PutMapping
+    public ResponseEntity<?> modify(@RequestBody Task todo){
+        Main.base.modify(todo);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //удаляем задачу
-    @RequestMapping(value = "todo", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean delete(@RequestBody Task todo){
-        Storage.deleteToDo(todo.getId());
-        return true;
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestParam int id){
+        Main.base.delete(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

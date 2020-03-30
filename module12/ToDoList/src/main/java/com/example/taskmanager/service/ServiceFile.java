@@ -3,31 +3,30 @@ package com.example.taskmanager.service;
 import com.example.taskmanager.model.Task;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * Класс, который осуществляет работу с базой данных
+ * Класс, который осуществляет работу с файловой базой данных
  */
-public class Service {
-
-    private String fileTodo = "";
+public class ServiceFile implements Base {
+    private int counterId = 0; //счетчик для ид дела
+    private static HashMap<Integer, Task> tasks = new HashMap<>(); //задачи
+    private String fileTodo = ""; //путь к бд
 
     {
         Properties prop = new Properties();
         try {
             //Загружаем настройки
-            prop.load(getClass().getClassLoader().getResource("application.properties").openStream());
+            prop.load(Objects.requireNonNull(getClass().getClassLoader().getResource("application.properties")).openStream());
             fileTodo = (String)prop.get("data.file");
             loadData();
             trackMainClass();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -40,11 +39,10 @@ public class Service {
         Files.readAllLines(Path.of(fileTodo)).forEach(line -> {
             String[] params = line.split(";|,\t");
             if (params.length == 1) {
-                Storage.setCounterId(Integer.parseInt(params[0]));
+                counterId = Integer.parseInt(params[0]);
             } else {
-                Task todo = new Task(params[1], params[2]);
-                todo.setId(Integer.parseInt(params[0]));
-                Storage.getAllToDo().add(todo);
+                Task todo = new Task(Integer.parseInt(params[0]), params[1], params[2]);
+                tasks.put(todo.getId(), todo);
             }
         });
     }
@@ -54,7 +52,7 @@ public class Service {
      */
     @SneakyThrows
     private void saveData(){
-        String output = Storage.getCounterId() + ";\n" + Storage.getAllToDo().stream().
+        String output = counterId + ";\n" + tasks.values().stream().
                 map(todo -> todo.getId() + ",\t" + todo.getName() + ",\t" + todo.getDescription()).
                 collect(Collectors.joining(";\n"));
         Files.writeString(Path.of(fileTodo), output);
@@ -75,5 +73,42 @@ public class Service {
                 }
             }
         },0, 1, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public List<Task> list() {
+        return List.copyOf(tasks.values());
+    }
+
+    @Override
+    public boolean add(Task task) {
+        counterId++;
+        task.setId(counterId);
+        tasks.put(counterId, task);
+        return true;
+    }
+
+    @Override
+    public boolean modify(Task task) {
+        if (tasks.containsKey(task.getId())) {
+            tasks.get(task.getId()).setName(task.getName());
+            tasks.get(task.getId()).setDescription(task.getDescription());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Task get(int id) {
+        return tasks.get(id);
+    }
+
+    @Override
+    public boolean delete(int id) {
+        if (tasks.containsKey(id)) {
+            tasks.remove(id);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,17 +1,15 @@
 package com.example.taskmanager.model;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-@RequiredArgsConstructor
 public class Task {
-    private int id;
+    public int id;
 
-    @NonNull
-    private String name; //имя задачи
+    public String name; //имя задачи
 
-    @NonNull
-    private String description; //описание задачи
+    public String description; //описание задачи
 }

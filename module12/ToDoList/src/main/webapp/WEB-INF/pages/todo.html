@@ -37,26 +37,21 @@
                 let inputs = [...t.target.parentNode.children];
                 if (!inputs.some(i => i === t.relatedTarget) && inputs.every(i => i.value != i.defaultValue)){
                     //push new todo
-                    let body = '{';
-                    inputs.forEach((c, i) => {
-                        body += (i != 0 && ',' || '') + '"' + sendProperties[i] + '":"' + c.value + '"';
-                        c.value = inputsValue[i];
-                    });
-                    body += '}';
-                    sendRequest("/todo", "POST", body);
+                    let body = {id: 0, name: inputs[0].value, description: inputs[1].value};
+                    sendRequest("/todo", "POST", body).then(() => getListToDo());
                 }
             }
 
             //функция отправки запроса
             function sendRequest(url, method, body){
-                let params = !body ? {method: 'GET'} : {method: method, headers: {'Content-Type': 'application/json'}, body: body};
-                fetch(url, params).then(response => {
-                    if (response.status >= 400){ return Promise.reject(); }
-                    return response.json();
-                }).then(r => {
-                    if (!body) refreshToDoList(r);
-                    else getListToDo();
-                }).catch((e) => console.log('ошибка', e));
+                let params = {method: method};
+                if (body) {
+                    params['headers'] = {'Content-Type': 'application/json'};
+                    params['body'] = JSON.stringify(body);
+                }
+                return fetch(url, params).then(response => {
+                    if (response.status < 400) { return response.json(); }
+                });
             }
 
             //добавляем обработчики для создания нового задания
@@ -86,7 +81,9 @@
                         value: todo[i],
                         onkeydown: autoSizeInputs,
                         onblur: (t) => {
-                            sendRequest("/todo", "PUT", '{"id":' + todo.id + ',"' + i + '":"' + t.target.value + '"}');
+                            let inputs = [...t.target.parentNode.children];
+                            let body = {id: todo.id, name: inputs[0].value, description: inputs[1].value};
+                            sendRequest("/todo", "PUT", body).then(() => getListToDo());
                         }
                     }));
                 });
@@ -95,7 +92,7 @@
                     src: 'images/cross.png',
                     title: 'удалить задачу',
                     onclick: function () {
-                        sendRequest("/todo", "DELETE", '{"id":' + todo.id + '}');
+                        sendRequest("/todo?id=" + todo.id, "DELETE").then(() => getListToDo());
                     }
                 }));
                 document.querySelector(".todo.list").lastElementChild.before(div);
@@ -140,7 +137,7 @@
 
             //получаем список дел с сервера
             function getListToDo(){
-                sendRequest("/todo?list", "GET");
+                sendRequest("/todo?list", "GET").then(r => refreshToDoList(r));
             }
             getListToDo();
         })();
