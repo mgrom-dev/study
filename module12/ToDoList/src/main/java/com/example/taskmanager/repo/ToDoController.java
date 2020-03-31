@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "todo")
 @SuppressWarnings("unused")
 public class ToDoController {
+    //получаем задачу по ид
+    @GetMapping(value = "{id}")
+    public ResponseEntity<?> getPolls(@PathVariable int id){
+        return ResponseEntity.ok(Main.base.get(id));
+    }
+
     //получаем список задач
     @GetMapping(params = "list")
     public ResponseEntity<?> list(){
