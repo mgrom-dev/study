@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css">
@@ -9,8 +9,9 @@
 <body>
     <div class="main todo">
         <img class="home" src="/images/home.png" onclick="document.location.href = '/'">
-        <div class="todo list">
+        <div class="todo list" th:each="task : ${tasks}">
             Список задач<br>
+            <div><input type="text" class="item name" th:value="${task.name}"><input type="text" class="item description" th:value="${task.description}"></div>
             <div><input type="text" class="item name" value="Наименование"><input type="text" class="item description" value="Описание"></div>
         </div>
         <div class="time"></div>
