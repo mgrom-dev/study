@@ -12,7 +12,7 @@ public interface Base {
     List<Task> list();
 
     //Добавить новую задачу
-    boolean add(Task task);
+    int add(Task task);
 
     //Изменить задачу
     boolean modify(Task task);

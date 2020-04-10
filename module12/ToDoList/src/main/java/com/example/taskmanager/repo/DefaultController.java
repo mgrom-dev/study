@@ -1,12 +1,15 @@
 package com.example.taskmanager.repo;
 
+import com.example.taskmanager.Main;
+import com.example.taskmanager.model.Task;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -60,10 +63,12 @@ public class DefaultController {
 
     //адрес страницы с редактированием списка дел
     @GetMapping(value = "/todo{file_name:.htm|.html|$}")
-    public String todo(@PathVariable("file_name") String fileName, @RequestParam Map<String, String> allRequestParams) {
+    public String todo(@PathVariable("file_name") String fileName, @RequestParam Map<String, String> allRequestParams, Model model) {
         if (!fileName.isEmpty() || allRequestParams.size() > 0) {
             return "redirect:/todo";
         }
+        ArrayList<Task> tasks = new ArrayList<>(Main.base.list());
+        model.addAttribute("tasks", tasks);
         return "todo";
     }
 

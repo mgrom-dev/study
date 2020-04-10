@@ -81,11 +81,11 @@ public class ServiceFile implements Base {
     }
 
     @Override
-    public boolean add(Task task) {
+    public int add(Task task) {
         counterId++;
         task.setId(counterId);
         tasks.put(counterId, task);
-        return true;
+        return counterId;
     }
 
     @Override

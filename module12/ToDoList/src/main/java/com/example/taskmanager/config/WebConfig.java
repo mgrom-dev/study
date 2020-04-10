@@ -30,11 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.jsp("WEB-INF/pages/", ".html");
     }
 
-    // Thymeleaf template resolver serving HTML 5
     @Bean
     public ITemplateResolver thymeleafTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("/WEB-INF/templates/");
+        //templateResolver.setPrefix("/");
         templateResolver.setCacheable(false);
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);

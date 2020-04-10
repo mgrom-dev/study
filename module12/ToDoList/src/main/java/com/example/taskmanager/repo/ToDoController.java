@@ -25,8 +25,7 @@ public class ToDoController {
     //добавляем задачу
     @PostMapping
     public ResponseEntity<?> add(@RequestBody Task todo){
-        Main.base.add(todo);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(Main.base.add(todo));
     }
 
     //изменяем задачу

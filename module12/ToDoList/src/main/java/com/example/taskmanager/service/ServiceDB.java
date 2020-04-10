@@ -79,12 +79,12 @@ public class ServiceDB implements Base {
     }
 
     @Override
-    public boolean add(Task task) {
+    public int add(Task task) {
         counterId++;
         String id = counterId + "";
         jedis.hset(id, "name", task.getName());
         jedis.hset(id, "description", task.getDescription());
-        return true;
+        return counterId;
     }
 
     @Override
