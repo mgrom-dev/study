@@ -8,32 +8,32 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
     // Static Resource Config
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //Css resource
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/WEB-INF/resources/css/").setCachePeriod(0);
-        //Scripawts resource
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("/WEB-INF/resources/js/").setCachePeriod(0);
-        //Images resource
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/WEB-INF/resources/images/").setCachePeriod(0);
+//        //Css resource
+//        registry.addResourceHandler("/css/**")
+//                .addResourceLocations("/static/css/").setCachePeriod(0);
+//        //Scripawts resource
+//        registry.addResourceHandler("/js/**")
+//                .addResourceLocations("/static/js/").setCachePeriod(0);
+//        //Images resource
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("/static/images/").setCachePeriod(0);
     }
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp("WEB-INF/pages/", ".html");
+        registry.jsp("/WEB-INF/pages/", ".html");
     }
 
     @Bean
     public ITemplateResolver thymeleafTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        //templateResolver.setPrefix("/");
+        templateResolver.setPrefix("/WEB-INF/pages/");
         templateResolver.setCacheable(false);
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);

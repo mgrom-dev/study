@@ -3,12 +3,13 @@ package com.example.taskmanager.repo;
 import com.example.taskmanager.Main;
 import com.example.taskmanager.model.Task;
 import org.jsoup.Jsoup;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -31,32 +32,14 @@ public class DefaultController {
     }
 
     //получаем текущую погоду
-    @GetMapping(value = "/weather{file_name:.jpg|.png|$}")
-    public String weather(@PathVariable("file_name") String fileName) {
-        String resourcePath = "src/main/webapp/WEB-INF/resources/images/weather/"; //место хранения картинок с погодой
-        long now = System.currentTimeMillis(); //текущее время
-        String weatherImg = ""; //путь к картинке с погодой
+    @GetMapping(value = "/weather{file_name:.htm|.html|$}", produces = "image/jpg")
+    public ResponseEntity<byte[]> weather(@PathVariable("file_name") String fileName) {
         try {
-            weatherImg = Files.walk(Paths.get(resourcePath)).filter(path -> {
-                //фильтруем все картинки которые старше двух часов
-                String time = path.getFileName().toString().replaceAll("[^0-9]", "");
-                if (!time.isEmpty()) {
-                    return now - (1000 * 60 * 60 * 2) < Long.parseLong(time);
-                }
-                return false;
-            }).findFirst().orElse(Paths.get("")).getFileName().toString(); //берем первую ликвидную картинку
-            //если свежой картинки нет в базе, то загружаем новую с сайта bookcdn и сохраняем в хранилище
-            if (weatherImg.isEmpty()) {
-                byte[] bytes = Jsoup.connect("https://w.bookcdn.com/weather/picture/11_17760_1_20_e0dfd9_118_45505c_607994_f0edf0_0_e0dfd9_607994_0_6.png?scode=2&domid=589&anc_id=23426").
-                        ignoreContentType(true).execute().bodyAsBytes();
-                Files.write(Paths.get(resourcePath + now + ".png"), bytes);
-                weatherImg = now + ".png";
-            }
+            byte[] bytes = Jsoup.connect("https://w.bookcdn.com/weather/picture/11_17760_1_20_e0dfd9_118_45505c_607994_f0edf0_0_e0dfd9_607994_0_6.png?scode=2&domid=589&anc_id=23426").
+                    ignoreContentType(true).execute().bodyAsBytes();
+            return new ResponseEntity<>(bytes, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error in 'DefaultController.java' method get weather: " + e.toString());
-        }
-        if (!weatherImg.isEmpty()) {
-            return "redirect:/images/weather/" + weatherImg;
         }
         return null;
     }

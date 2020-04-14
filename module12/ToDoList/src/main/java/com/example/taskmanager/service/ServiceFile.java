@@ -36,6 +36,10 @@ public class ServiceFile implements Base {
      */
     @SneakyThrows
     private void loadData(){
+        //getClass().getResource("/WEB-INF/resources/css/style.css");
+        if (Files.notExists(Path.of(fileTodo))){
+            return ;
+        }
         Files.readAllLines(Path.of(fileTodo)).forEach(line -> {
             String[] params = line.split(";|,\t");
             if (params.length == 1) {
