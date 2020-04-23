@@ -16,7 +16,7 @@ public class Loader
         for (int i = 0; i < LETTERS.length; i++){
             int index = i % THREADS_COUNT.get();
             if (lettersForThread[index] == null) {
-                lettersForThread[index] ="";
+                lettersForThread[index] = "";
             }
             lettersForThread[index] += LETTERS[i];
         }
