@@ -1,93 +1,26 @@
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
 public class Loader
 {
-    private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    private static SimpleDateFormat visitDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+    public static final String FILE_NAME = "res/data-18M.xml"; // файл для парсинга
 
-    private static HashMap<Integer, WorkTime> voteStationWorkTimes = new HashMap<>();
-    private static HashMap<Voter, Integer> voterCounts = new HashMap<>();
-
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
-        String fileName = "res/data-1M.xml";
+        //Делаем замеры времени выполнения и используемой памяти
+        long size = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long time = System.currentTimeMillis();
 
-        parseFile(fileName);
+        //парсим файл с помощью SAXParser’а
+        SAXParser parser = new SAXParser(FILE_NAME);
 
         //Printing results
         System.out.println("Voting station work times: ");
-        for(Integer votingStation : voteStationWorkTimes.keySet())
-        {
-            WorkTime workTime = voteStationWorkTimes.get(votingStation);
-            System.out.println("\t" + votingStation + " - " + workTime);
-        }
+        parser.getVoteStationWorkTimes().forEach((votingStation, workTime) -> System.out.println("\t" + votingStation + " - " + workTime));
 
         System.out.println("Duplicated voters: ");
-        for(Voter voter : voterCounts.keySet())
-        {
-            Integer count = voterCounts.get(voter);
-            if(count > 1) {
-                System.out.println("\t" + voter + " - " + count);
-            }
-        }
-    }
+        parser.getVoterCounts().entrySet().stream().filter(entry -> entry.getValue() > 1).
+                forEach(entry -> System.out.println("\t" + entry.getKey() + " - " + entry.getValue()));
 
-    private static void parseFile(String fileName) throws Exception
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File(fileName));
-
-        findEqualVoters(doc);
-        fixWorkTimes(doc);
-    }
-
-    private static void findEqualVoters(Document doc) throws Exception
-    {
-        NodeList voters = doc.getElementsByTagName("voter");
-        int votersCount = voters.getLength();
-        for(int i = 0; i < votersCount; i++)
-        {
-            Node node = voters.item(i);
-            NamedNodeMap attributes = node.getAttributes();
-
-            String name = attributes.getNamedItem("name").getNodeValue();
-            Date birthDay = birthDayFormat.parse(attributes.getNamedItem("birthDay").getNodeValue());
-
-            Voter voter = new Voter(name, birthDay);
-            Integer count = voterCounts.get(voter);
-            voterCounts.put(voter, count == null ? 1 : count + 1);
-        }
-    }
-
-    private static void fixWorkTimes(Document doc) throws Exception
-    {
-        NodeList visits = doc.getElementsByTagName("visit");
-        int visitCount = visits.getLength();
-        for(int i = 0; i < visitCount; i++)
-        {
-            Node node = visits.item(i);
-            NamedNodeMap attributes = node.getAttributes();
-
-            Integer station = Integer.parseInt(attributes.getNamedItem("station").getNodeValue());
-            Date time = visitDateFormat.parse(attributes.getNamedItem("time").getNodeValue());
-            WorkTime workTime = voteStationWorkTimes.get(station);
-            if(workTime == null)
-            {
-                workTime = new WorkTime();
-                voteStationWorkTimes.put(station, workTime);
-            }
-            workTime.addVisitTime(time.getTime());
-        }
+        size = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - size;
+        time = System.currentTimeMillis() - time;
+        System.out.printf("Объем использованной памяти: %,d МБ\nВремя выполения программы: %,d мс", size / 1024 / 1024, time);
     }
 }
