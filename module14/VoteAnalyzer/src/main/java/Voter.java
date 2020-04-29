@@ -1,20 +1,22 @@
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Voter
 {
     private String name;
-    private Date birthDay;
+    private String birthDay;
 
-    public Voter(String name, Date birthDay)
+    public Voter(String name, String birthDay)
     {
         this.name = name;
-        this.birthDay = birthDay;
+        this.birthDay = birthDay.replace(".", "-");
     }
 
     @Override
     public boolean equals(Object obj)
     {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         Voter voter = (Voter) obj;
         return name.equals(voter.name) && birthDay.equals(voter.birthDay);
     }
@@ -22,11 +24,7 @@ public class Voter
     @Override
     public int hashCode()
     {
-        long code = name.hashCode() + birthDay.hashCode();
-        while(code > Integer.MAX_VALUE) {
-            code = code/10;
-        }
-        return (int) code;
+        return name.hashCode() + birthDay.hashCode();
     }
 
     public String toString()
@@ -40,7 +38,7 @@ public class Voter
         return name;
     }
 
-    public Date getBirthDay()
+    public String getBirthDay()
     {
         return birthDay;
     }
