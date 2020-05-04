@@ -1,3 +1,5 @@
+import javafx.util.Builder;
+
 import java.sql.*;
 
 public class DBConnection
@@ -24,6 +26,7 @@ public class DBConnection
                         "`count` INT NOT NULL, " +
                         "PRIMARY KEY(id), " +
                         "UNIQUE KEY name_date(name(50), birthDate))");
+                connection.createStatement().executeQuery("SET GLOBAL max_allowed_packet = 1024*1024*50");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

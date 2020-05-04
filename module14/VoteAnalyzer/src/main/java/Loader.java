@@ -1,6 +1,6 @@
 public class Loader
 {
-    public static final String FILE_NAME = "res/data-18M.xml"; // файл для парсинга
+    public static final String FILE_NAME = "res/data-1572M.xml"; // файл для парсинга
 
     public static void main(String[] args)
     {
@@ -8,9 +8,13 @@ public class Loader
         long size = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         long time = System.currentTimeMillis();
 
-        //парсим файл с помощью SAXParser’а
-        SAXParser parser = new SAXParser(FILE_NAME);
-        parser.parse(() -> DBConnection.executeMultiInsert(parser.getVoters()));
+        InputStreamParser inputStreamParser = new InputStreamParser(FILE_NAME);
+        inputStreamParser.setMethodOverflow(() -> {
+            //new Thread(() -> {
+                DBConnection.executeMultiInsert(inputStreamParser.getInsertVoters());
+            //}).start();
+        });
+        inputStreamParser.parse();
         DBConnection.printVoterCounts();
 
         size = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - size;
