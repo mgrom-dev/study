@@ -1,52 +1,29 @@
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URI;
-
 public class Main
 {
-    private static String symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String SYMBOLS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
-        Configuration configuration = new Configuration();
-        configuration.set("dfs.client.use.datanode.hostname", "true");
         System.setProperty("HADOOP_USER_NAME", "root");
-
-        FileSystem hdfs = FileSystem.get(
-            new URI("hdfs://43492d6f40d2:8020"), configuration
-        );
-        Path file = new Path("hdfs://43492d6f40d2:8020/test/file.txt");
-
-        if (hdfs.exists(file)) {
-            hdfs.delete(file, true);
+        FileAccess fs = new FileAccess("ed60d48b3593");
+        fs.delete("/test/file.txt");
+        fs.create("/test/file.txt");
+        fs.create("/test/1.txt");
+        fs.create("/test/2/");
+        for(int i = 0; i < 100; i++) {
+            fs.append("/test/file.txt", getRandomWord() + " ");
         }
-
-        OutputStream os = hdfs.create(file);
-        BufferedWriter br = new BufferedWriter(
-            new OutputStreamWriter(os, "UTF-8")
-        );
-
-        for(int i = 0; i < 10_000_000; i++) {
-            br.write(getRandomWord() + " ");
-        }
-
-        br.flush();
-        br.close();
-        hdfs.close();
+        System.out.println(fs.read("/test/file.txt"));
+        System.out.println(fs.list("/test/"));
     }
 
     private static String getRandomWord()
     {
         StringBuilder builder = new StringBuilder();
         int length = 2 + (int) Math.round(10 * Math.random());
-        int symbolsCount = symbols.length();
+        int symbolsCount = SYMBOLS.length();
         for(int i = 0; i < length; i++) {
-            builder.append(symbols.charAt((int) (symbolsCount * Math.random())));
+            builder.append(SYMBOLS.charAt((int) (symbolsCount * Math.random())));
         }
         return builder.toString();
     }
