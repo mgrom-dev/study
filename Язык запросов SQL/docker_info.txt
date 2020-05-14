@@ -15,11 +15,52 @@ docker run --rm --name skill-redis -p 127.0.0.1:6379:6379/tcp -d redis
 
 Список запущенных контейнеров
 docker ps
+Список установленных контейнеров
+docker ps -a
 
 Выполнить команду в контейнере
 docker exec -it skill-sql mysql -ptest
 -it - выполнить команду в запущенном контейнере и передать управление
 -i - выполнить команду без передачи управления в консоль
+
+Работа с хадупом
+Запуск командной строки bash
+docker exec -it e9eeb71567b9 /bin/bash
+Установка аплета
+yum install wget
+Загрузить программу
+wget http://mirror.linux-ia64.org/apache/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz
+Текущая директория
+pwd
+Список файлов в текущей директории
+ll
+Распаковать архив
+tar -xvf spark-2.4.5-bin-hadoop2.7.tgz
+Удалить файл
+rm spark-2.4.5-bin-hadoop2.7.tgz
+Переименовать файл
+mv spark-2.4.5-bin-hadoop2.7/ spark/
+Сменить владельца файла
+chown -R root:root spark/
+Перейти в другую директорию
+cd spark/
+Запуск на клиент ноде приложения examples/jars/spark-examples_2.11-2.4.4.jar выбрав класс org.apache.spark.examples.SparkPi
+bin/spark-submit --deploy-mode client --class org.apache.spark.examples.SparkPi examples/jars/spark-examples_2.11-2.4.4.jar
+bin/spark-submit --deploy-mode client --class Main SparkExample.jar "hdfs://e9eeb71567b9:8020/test/AMD GPU acceleration does not work.html" /result
+
+Скопировать файл в контейнер
+docker cp SparkExample.jar e9eeb71567b9:/spark
+Создать папку в hadoop
+docker exec -it e9eeb71567b9 hadoop fs -mkdir /test
+Скопировать файл
+hadoop fs -copyFromLocal 'AMD%20GPU%20acceleration%20does%20not%20work.html' /test
+Подключиться к контейнеру
+docker exec -i -t e9eeb71567b9 bash
+Ctrl+D - выйти
+Просмотреть файл
+more part0000
+
+hadoop fs -copyFromLocal /home/training/input  input22
 
 Остановить запущенный контейнер
 docker stop skill-sql
