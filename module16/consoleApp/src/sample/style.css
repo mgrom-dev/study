@@ -1,0 +1,36 @@
+* {
+    -fx-background-color: BLACK;
+    -fx-fill: WHITE;
+}
+.text {
+    -fx-fill: WHITE;
+}
+.select-text {
+    -fx-font-weight: BOLD;
+    -fx-font-size: 14;
+    -fx-fill: YELLOW;
+}
+
+.split-menu-button, .split-menu-button .label, .split-menu-button .context-menu, .split-menu-button .menu-item {
+    -fx-background-color: BLACK;
+    -fx-fill: WHITE;
+}
+.split-menu-button .context-menu {
+    -fx-border-color: YELLOW;
+}
+.split-menu-button .arrow-button, .split-menu-button .arrow-button .arrow {
+    visibility : false;
+    -fx-padding: 0;
+}
+.split-menu-button .label {
+    -fx-border-color: BLACK;
+    -fx-text-fill: WHITE;
+}
+.split-menu-button .menu-item:focused .label {
+    -fx-background-color: GRAY;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
+}

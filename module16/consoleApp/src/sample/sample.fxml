@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="mainForm" prefHeight="309.0" prefWidth="441.0" styleClass="grid-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints hgrow="ALWAYS" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="25.0" prefHeight="25.0" valignment="CENTER" />
+      <RowConstraints />
+      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+   </rowConstraints>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <FlowPane id="commandBlock" alignment="CENTER_LEFT" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+   <Text id="info" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Status" wrappingWidth="800.0" GridPane.rowIndex="1">
+      <GridPane.margin>
+         <Insets bottom="5.0" />
+      </GridPane.margin></Text>
+   <ListView id="content" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
+   <GridPane id="messageForm" alignment="TOP_CENTER" maxHeight="100.0" maxWidth="300.0" minHeight="100.0" minWidth="300.0" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: GRAY;" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+      <GridPane.margin>
+         <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+      </GridPane.margin>
+      <columnConstraints>
+         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="ALWAYS" />
+         <RowConstraints minHeight="10.0" valignment="TOP" vgrow="ALWAYS" />
+         <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" />
+      </rowConstraints>
+      <effect>
+         <DropShadow height="16.0" radius="7.5" spread="1.0" width="16.0">
+            <color>
+               <Color red="0.04995126649737358" green="0.04995126649737358" blue="0.2631579041481018" />
+            </color>
+         </DropShadow>
+      </effect>
+      <Text id="message" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: BLACK;" text="Text" GridPane.halignment="CENTER">
+         <GridPane.margin>
+            <Insets top="5.0" />
+         </GridPane.margin>
+      </Text>
+      <Button id="buttonOk" focusTraversable="false" mnemonicParsing="false" text="Ok" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="50.0" />
+         </GridPane.margin>
+      </Button>
+      <Button id="buttonCancel" focusTraversable="false" mnemonicParsing="false" text="Cancel" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets right="50.0" />
+         </GridPane.margin>
+      </Button>
+      <TextField id="inputText" style="-fx-background-color: GRAY;" GridPane.rowIndex="1" />
+   </GridPane>
+</GridPane>
